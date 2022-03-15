@@ -1,0 +1,97 @@
+<section class="content" >
+	<div class="container-fluid" >        	
+		<div class="container app"  id="chat-app" data-get-mensajes="<?=BASE_URL . 'chat/conversacion'?>" data-get-file="<?=BASE_URL . 'chat/descargar_archivo/'?>" data-conexion="<?=BASE_URL . 'chat/conexion'?>">
+			<div class="row app-one" style="background-color: #E0E0E0">
+				<div class="col-sm-4 side" >
+					<div class="side-one" >
+					<!--COLOR DE CONTACTOS EN LA PARTE DEL CHAT-->
+						<div class="row heading" style="background-color: #7CB342"> 
+							<span>Contactos</span>
+							<div class="col-sm-2 col-xs-2 heading-compose  pull-right">
+								<i class="fa fa-comments  pull-right" aria-hidden="true"></i>
+							</div>
+						</div>
+						<div class="row searchBox">
+							<div class="col-sm-12 searchBox-inner">
+								<div class="form-group has-feedback">
+                                    <select name="search" id="searchText" class="selectpicker form-control" data-live-search="true" onChange="document.location.href='<?=BASE_URL . 'chat/index/'?>'+this.value">
+                                        <option value="0">Buscar</option>
+                                        <?php if ( count($this->contactos) > 0 ): ?>
+										<?php foreach ($this->contactos as $indice => $contacto): ?>
+                                            <option value="<?=$contacto['usu_id']?>" <?php if($contacto['usu_id']==$this->usuc){?>selected<?php } ?>><?=$contacto['usu_nombre'] . ' ' . $contacto['usu_apellido']?></option>
+                                        <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </select>
+									<span class="glyphicon glyphicon-search form-control-feedback"></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="row sideBar" >
+
+							<?php if ( count($this->contactob) > 0 ): ?>
+								<?php foreach ($this->contactob as $indice => $contacto): ?>
+									<div class="row sideBar-body fila-contacto" data-usuario-id="<?=$contacto['usu_id']?>">
+										<div class="col-sm-3 col-xs-3 sideBar-avatar">
+											<div class="avatar-icon">
+												
+													<img src="<?=(($contacto['usu_foto']!="") ? BASE_URL . 'uploads/usuarios/' . $contacto['usu_foto'] : BASE_URL . 'uploads/usuarios/user_default_redso.png')?>">
+
+											</div>
+										</div>
+										<div class="col-sm-9 col-xs-9 sideBar-main">
+											<div class="row">
+												<div class="col-sm-8 col-xs-8 sideBar-name">
+													<span class="name-meta truncate-text"><?=$contacto['usu_nombre'] . ' ' . $contacto['usu_apellido']?>
+													</span>
+													<?php if ($contacto['usu_tipo'] == 1) : ?>
+														<small class="text-muted">Estudiante</small>
+													<?php elseif ($contacto['usu_tipo'] == 2) : ?>
+														<small class="text-muted">Docente</small>
+													<?php elseif ($contacto['usu_tipo'] == 3) : ?>
+														<small class="text-muted">Auxiliar</small>
+													<?php elseif ($contacto['usu_tipo'] == 4) : ?>
+														<small class="text-muted">Administrativo</small>
+													<?php endif ?>
+												</div>
+												<div class="col-sm-4 col-xs-4 pull-right sideBar-time">
+													<span class="time-meta pull-right"><i class="fa fa-circle" <?=($contacto['usu_conectado']) ? 'style="color: #2ecc71;"' : '' ?> ></i></span>
+												</div>
+											</div>
+										</div>
+									</div>
+								<?php endforeach; ?>
+							<?php endif; ?>
+								
+						</div>
+					</div>
+
+				</div>
+
+				<div class="col-sm-8 conversation">
+					<div class="row heading" style="background-color: #7CB342" >
+						<span>Mensajes</span>
+					</div>
+
+					<div class="row message" id="conversation" data-usuario="<?=Session::get('usuario_id')?>">
+					</div>
+
+					<div class="row reply">
+						<input type="hidden" name="usuario_destinatario" value="">
+						<input type="hidden" name="usuario_remitente" value="<?=Session::get('usuario_id')?>">
+						<input type="file" name="adjunto" id="adjunto" style="display: none;" data-upload="<?=BASE_URL . 'chat/subir_archivo'?>"/>
+						<button class="col-sm-1 col-xs-1 reply-emojis text-center btn btn-link btn-sm" id="btn-adjunto">
+							<i class="fa fa-paperclip fa-2x"></i>
+						</button>
+						<div class="col-sm-10 col-xs-9 reply-main">
+							<textarea class="form-control" rows="1" id="comment"></textarea>
+						</div>
+							<button class="col-sm-1 col-xs-1 reply-send text-center btn btn-link btn-sm" style="cursor: pointer;" id="send-message" disabled>
+								<i class="fa fa-paper-plane fa-2x" aria-hidden="true"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>

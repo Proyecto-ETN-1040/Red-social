@@ -1,0 +1,456 @@
+      <!-- codigo de la segunda pantalla doce se ve el perfil-->
+<!-- ............................................................... -->
+       <!-- .................................................. -->
+            <!-- ........................................ -->
+                 <!-- .............................. -->
+                      <!-- .................... -->
+                           <!-- ........... -->
+						   
+<section class="content">
+<!---------------------------------------- color de fondo en su totalidad ------------------------------------------------------------------->
+	<div class="container-fluid" style="background-color: #f5eef8">        	
+		<div class="row clearfix" >
+<!---------------------------------------------------PRIMERA COLUMNA---------------------------------------------------------------->
+<!--color claro -->
+			<div class="col-xs-12 col-sm-3 panel" style="background-color: #d5f5e3;">
+				<div class="card profile-card">
+<!-- color oscuro -->
+					<div class="profile-header" style="background-color: #0b5345">&nbsp;</div>
+					<div class="profile-body " style="background-color: #eaeded">
+<!-- FOTO DE PERFIL -->
+                        <!--imegen por defecto y el tamaño de la fotografia-->
+						<div class="image-area" style="padding:5%;" >
+						    
+                        	<?php 
+								$pub = new inicioController();
+								if(Session::get('foto')==''){
+									$img = 'views/layout/imgs/silueta.jpg';	
+								}else{
+									$img = 'uploads/usuarios/'.Session::get('foto');
+								} 
+							?>
+							<!--TAMAÑO DE LA FOTOGRAFIA-->
+							<img src="<?=BASE_URL . $img?>" alt="Redso - Profile Image" class="img-responsive" style="width: 250px;height: 230px;">
+						</div>
+<!-- FIN FOTO DE PERFIL -->
+<!-- COLOR DE FONDO DONDE MUESTRA DATOS DE LA PUBLICACION Y LA HORA -->
+						<div class="content-area">
+							<h3 style= "color:#000000;"><?=Session::get('nombre_usuario')?></h3>
+						
+							<p style= "color:#01579b;"><?php if(Session::get('nivel')==1){ echo 'Estudiante'; } else if(Session::get('nivel')==2){ echo 'Docente'; }else if(Session::get('nivel')==3){ echo 'Auxiliar'; }else if(Session::get('nivel')==4){ echo 'Administrativo'; }?></p>
+						</div>
+					</div>
+<!--color oscuro-->
+					<div class="profile-footer" style="background-color: #0b5345">
+						<button class="btn btn-secundary btn-lg waves-effect btn-block" onClick="document.location.href='<?=BASE_URL . 'perfil'?>'">VER PERFIL</button>
+					</div>
+				</div>
+				<?php
+                    $sugerencias = ($pub->sugerencias(Session::get('id')));
+                    $nsu = count($sugerencias);
+					if($nsu>0){
+                ?>
+				<div class="card card-about-me">
+					<div class="header" style="background-color: #aed581">
+						<h2>ULTIMAS PUBLICACIONES</h2>
+					</div>
+					<div class="body">
+						<ul>
+							<?php foreach ($sugerencias as $sugerencia) : ?>
+                            <li>
+								<div class="title">
+									<a href="<?=BASE_URL . 'perfil/index/' . $sugerencia['usu_id']?>"><i class="fa fa-book"></i> <?=$sugerencia['usu_nombre']." ".$sugerencia['usu_apellido']?></a>
+								</div>
+							</li>
+                            <?php endforeach; ?>
+
+						</ul>
+					</div>
+				</div>
+			<?php } ?>
+            <div class="card card-about-me">
+					<div class="header" style="background-color: #aed581">
+						<h2>PUBLICACIONES POR MATERIAS</h2>
+					</div>
+					<div class="body" style="background-color: #ffffff">
+						<select name="bue" id="bue" class="selectpicker form-control" data-live-search="true" onChange="document.location.href='<?=BASE_URL . 'inicio/index/null/'?>' + this.value">
+                        	<option value="">Buscar materia</option>
+                            <?php foreach ($this->materias as $mat) : ?>
+                            	<option value="<?=$mat['mat_id']?>"><?=$mat['mat_desc']?></option>
+                            <?php endforeach; ?>
+                        </select>
+					</div>
+				</div>
+            </div>
+			<!---------------------------------------------FIN DE LA 1RA COLUMNA-------------------------------------------------->	
+			<!--------------------------------------------------2DA COLUMNA------------------------------------------------------->
+			<div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-offset-3 col-lg-offset-3" >
+				<?php if(Session::get('materia')!=0){ $ptip = $this->mat['mat_id']; ?>
+					<h2 align="center">Publicaciones: <?=$this->mat['mat_desc']; ?></h2>
+					<h3 align="center"><?= $this->mat['mat_detalle']; ?></h3>
+				<?php }else{ ?>
+					<?php $ptip = 0; ?>
+				<?php } ?>
+                <?php if($ptip==0 or ($ptip!=0 and Session::get('nivel')!=1)){ ?>
+				<div class="card" >
+				<!--colores para los comentarios-->
+					<div class="body" style="background-color: #f5eef8">  <!--COLOR DE BORDE DE PUBLICA LO QUE PIENSAS -->
+						<div>
+							<form action="<?=BASE_URL.'inicio/registrar_publicacion'?>" method="post" 
+							class="form-horizontal form-datos" style="background-color: #f5eef8"> <!--COLOR DE complemento DE PUBLICA LO QUE PIENSAS --> 
+								<input type="hidden" name="pmat" id="pmat" value="<?=$ptip?>">
+								<div class="form-group">
+
+									<div class="col-sm-12">
+										<div class="form-line">
+											<textarea class="form-control" id="desc" name="desc" rows="3" 
+											placeholder="Publica lo que piensas" style="background-color: #f5eef8"></textarea> <!--COLOR DE PUBLICA LO QUE PIENSAS -->
+										</div>
+									</div>
+								</div>
+                                <div class="form-group imagenes" style="display:none;">
+                                    <div class="col-sm-12">
+                                        <!--<small class="text-muted">Imagenes de la Publicación</small>-->
+                                        <div id="dropzone" class="dropzone" style="display: block; width: 100%;  border: 2px dashed #ced4da;">
+                                            <div class="dz-message">
+                                                <h3>Arrastrar las imágenes aqui </h3>
+                                                o <strong>click</strong> para subir las imágenes
+                                            </div>
+                                        </div>
+                                    </div>
+								</div><input type="hidden" name="adjuntos" id="adjuntos">
+                                <div class="form-group">
+									<div class="col-sm-12" align="right">
+                                        <button type="submit" class="btn btn-success pull-right">PUBLICAR</button>
+                                    	<a href="#" class="pull-left btn btn-success" onClick="mostrar('imagenes','')" ><i class="fa fa-images" ></i> IMAGEN</a>
+									</div>
+								</div>
+							</form>
+
+						</div>
+					</div>
+				</div>
+                <?php } ?>
+                <?php if ( count($this->publicacion) > 0 ) : ?>
+				<?php foreach ($this->publicacion as $publicacion) : 
+                    if($publicacion['usu_foto']==''){
+                        $img = 'views/layout/imgs/silueta.jpg';	
+                    }else{
+                        $img = 'uploads/usuarios/'.$publicacion['usu_foto'];
+                    } 
+                    $comentarios = ($pub->comentarios($publicacion['pub_id']));
+                    $num = count($comentarios);
+					$likes = ($pub->likes($publicacion['pub_id']));
+					$nul = count($likes);
+					$imagenes = ($pub->imagenes($publicacion['pub_id']));
+					$likev = ($pub->likes_v(Session::get('id'),$publicacion['pub_id']));
+                ?>
+				<!-- color oscuro pra bordes de cometarios 5f6a6a o eaeded ff5eef8-->
+				<div class="card" id="pub-<?=$publicacion['pub_id']?>" style="background-color: #eaeded">
+					<div class="body">
+						<div>
+							<div class="panel-default panel-post" >
+							<!-- color de los sms eaeded o oscuro 5f6a6a-->
+										<div class="panel-heading" style="background-color: #5f6a6a">
+											<div class="media">
+												<div class="media-left">
+													<a href="#"><img style="width: 48px; height: 47px;" src="<?=BASE_URL . $img?>" ></a>
+												</div>
+												<div class="media-body">
+													<h4 class="media-heading">
+													<!-- color de letra para cuando ponen un sms -->
+														<a style= "color:#ffffff;" href="<?=BASE_URL . 'perfil/index/' . $publicacion['usu_id']?>"><?=$publicacion['usu_nombre']." ".$publicacion['usu_apellido']?></a>
+													<!-- fin color de letra para cuando ponen un sms -->
+													</h4>
+													<!--COLOR DE LETRA DE FECHA DE PUBLICACION-->
+													<q style= "color:#ffffff;">Publicado en:  <?=$publicacion['pub_fecha']?> a las <?=$publicacion['pub_hora']?> </q>
+												<!-- fin COLOR DE LETRA DE FECHA DE PUBLICACION-->
+												</div>
+												
+											</div>
+										</div>
+										<div class="panel-body">
+											<div class="post">
+                                            	<?php if(Session::get('id')==$publicacion['usu_id']){ ?>
+                                                <div class="pull-right opc-edit"><a data-toggle='modal' href="#mod-publicacion" class="btn-mod" title="Modificar" onClick="mod_publicacion('<?=$publicacion['pub_id']?>','<?=BASE_URL.'inicio/datos_publicacion'?>')"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;<a href="#" class="btn-mod borrar-item" title="Eliminar" data-remove="<?=BASE_URL.'inicio/eliminar_publicacion'?>" data-id="<?=$publicacion['pub_id']?>"  data-item="<?=$publicacion['pub_fecha']?> <?=$publicacion['pub_hora']?>" data-reg="div#pub-<?=$publicacion['pub_id']?>"><i class="fa fa-trash"></i></a></div>
+                                                <?php } ?>
+												<div class="post-heading" style="background-color: #f5eef8">
+													<p><?=$publicacion['pub_desc']?></p>
+												</div>
+												<div class="post-content" align="center" >
+													<?php $cont=0; if(count($imagenes)>0){ ?>
+                                                        <div class="slideshow" style="height: 0; overflow: hidden;">
+															<?php  foreach ($imagenes as $imagen) : ?>
+                                                            	<div class="slide"><img src="<?=BASE_URL.'uploads/'.$imagen['img_imagen']?>" class="img-responsive" style="max-height:500px;">
+                                                            	</div>
+                                                            <?php $cont++; endforeach; ?>
+                                                        </div>
+                                                    <?php } ?>
+
+												</div>
+											</div>
+										</div>
+										<div class="panel-footer" style="background-color: #f5eef8">
+											<ul>
+												<li>
+													<a href="#" id="like<?=$publicacion['pub_id']?>" onClick="ejecutar('megusta<?=$publicacion['pub_id']?>'); return false;" class="<?php if(!empty($likev)){ echo 'ops'; } ?>">
+														<i class="fa fa-thumbs-up"></i>
+														<span><span id="nul<?=$publicacion['pub_id']?>"><?=$nul?></span> Me gusta</span>
+														<?php /*if(!empty($likev)){ ?>
+                                                            <span><?=$nul?> Ya no Me gusta</span>
+                                                        <?php } else { ?>
+                                                            <span><?=$nul?> Me gusta</span>
+                                                        <?php }*/ ?>
+													</a>
+                                                    <form id="megusta<?=$publicacion['pub_id']?>" action="<?=BASE_URL.'inicio/registrar_like'?>" method="post" class="form-datos">
+                                                    <input type="hidden" name="pid" id="pidl" value="<?=$publicacion['pub_id']?>">
+                                                    <?php if(!empty($likev)){ ?>
+                                                            <input type="hidden" id="tipo<?=$publicacion['pub_id']?>" name="tipo" value="<?=$likev['lik_id']?>">
+                                                    <?php } else { ?>
+                                                            <input type="hidden" id="tipo<?=$publicacion['pub_id']?>" name="tipo" value="0">
+                                                    <?php } ?>
+                                                    </form>
+												</li>
+												<li>
+													<a href="#pub-<?=$publicacion['pub_id']?>" id="btnc<?=$publicacion['pub_id']?>" onClick="mostrar('comentarios','<?=$publicacion['pub_id']?>'); return false;">
+														<i class="fa fa-comment"></i>
+														<span><?=$num?> Comentarios</span>
+													</a>
+												</li>
+												<li>
+													<a href="#" onClick="ejecutar('compartir<?=$publicacion['pub_id']?>'); return false;">
+														<i class="fa fa-share-alt"></i>
+														<span>Compartir</span>
+													</a>
+                                                    <form id="compartir<?=$publicacion['pub_id']?>" action="<?=BASE_URL.'inicio/registrar_compartir'?>" method="post" class="form-datos">
+                                                    <input type="hidden" name="pid" id="pidc" value="<?=$publicacion['pub_id']?>">
+                                                    </form>
+												</li>
+											</ul>
+                                            <?php if($num>0){ ?>
+											<div class="form-group comentarios<?=$publicacion['pub_id']?>" <?php if(empty($this->comentario) or $this->comentario!=$publicacion['pub_id']){ ?>style="display:none"<?php } ?>>
+											<!------------------------------Si no hay ninguna foto cargada coloca una general------------------------------------>
+												<?php 
+												foreach ($comentarios as $cop) : 
+													if($publicacion['usu_foto']==''){
+														$img = 'views/layout/imgs/silueta.jpg';	
+													}else{
+														$img = 'uploads/usuarios/'.$cop['usu_foto'];
+													} 
+												?>
+												<!--   --------------                     color oscuro       ----------      -->
+                                                <div class="panel-heading" style="background-color:#ebedef" id="com-<?=$cop['com_id']?>">
+                                                    <div class="media">
+                                                        <div class="media-left">
+                                                            <a href="#"><img src="<?=BASE_URL . $img?>"></a>
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <?php if(Session::get('id')==$cop['usu_id']){ ?>
+                                                            <div class="pull-right opc-edit"><a data-toggle='modal' href="#mod-comentario" class="btn-mod" title="Modificar" onClick="mod_comentario('<?=$cop['com_id']?>','<?=BASE_URL.'inicio/datos_comentario'?>')"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;<a href="#" class="btn-mod borrar-item" title="Eliminar" data-remove="<?=BASE_URL.'inicio/eliminar_comentario'?>" data-id="<?=$cop['com_id']?>"  data-item="<?=$cop["com_comentario"]?>" data-reg="div#com-<?=$cop['com_id']?>"><i class="fa fa-trash"></i></a></div>
+                                                            <?php } ?>
+                                                            <a href="#" class="text-info"><?=$cop['usu_nombre']." ".$cop['usu_apellido']?></a> <span class="com-<?=$cop['com_id']?>"><?=$cop["com_comentario"]?></span><br>
+                                                            <span class="text-muted"><?=$cop['com_fecha']?> | <?=$cop['com_hora']?></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <?php endforeach;?>
+											</div>
+                                            <?php } ?>
+                                            <form action="<?=BASE_URL.'inicio/registrar_comentario'?>" method="post" class="form-datos">
+											<div class="form-group">
+												<div class="form-line">
+											
+                                                    <input type="text" class="form-control" name="comentario" placeholder="Escribe un comentario"  style="background-color: #ebedef">
+                                                    <input type="hidden" name="pid" value="<?=$publicacion['pub_id']?>">
+                                                    <input type="hidden" name="mid" value="<?=$ptip?>">
+                                                    <input type="hidden" name="ctr" value="inicio">
+                                                    <input type="hidden" name="cus" value="0">
+                                                    <input type="submit" style="display:none">
+													
+												</div>
+											</div>
+                                            </form>
+										</div>
+							</div>                   	
+
+
+						</div>
+					</div>
+				</div>
+                <?php endforeach; ?>
+                <?php endif; ?>
+			</div>
+			<!---------------------------------------------FIN DE LA 2DA COLUMNA-------------------------------------------------->	
+			<!---------------------------------------------INICIO 3RA COLUMNA-------------------------------------------------->	
+			<div class="col-xs-12 col-sm-3 col-sm-offset-9 col-md-offset-9 col-lg-offset-9 panel" style="background-color: #d5f5e3;" >
+				<div class="card profile-card">
+				<!-- color oscuro-->
+					
+						<div style="padding: 0 0 0 0; background: #0b5345;">
+							<p align="center" style="color: #28b463; padding: 20px; font-size: medium;">Aplicaciones de la carrera</p>
+						</div>
+					
+					<!----------------------------------------recuadro arriba de boton de saber mas------------------------------------------------------>
+					<!-- color claro eaeded-->
+					<div class="profile-body" style="background-color: #eaeded; margin-top: 15px; margin-bottom: 15px;" align="center">
+						
+                        <a href="#" class="btn btn-success btn-lg btn-block" style="width: 250px; height: 40px;">Aplicación 1</a>
+                        <a href="#" class="btn btn-success btn-lg btn-block" style="width: 250px; height: 40px;">Aplicación 2</a>
+                        <a href="#" class="btn btn-success btn-lg btn-block" style="width: 250px; height: 40px;">Aplicación 3</a>
+					</div>
+					<!----------------------------------------boton de saber mas------------------------------------------------------>
+					<!-- color oscuro-->
+					<div class="profile-footer text-center" style="background-color: #0b5345">
+						<p align="center" style= "color:#fff;" >Red social para la carrera de Ingenieria Electronica</p>
+                        <a class="btn btn-secundary btn-lg waves-effect btn-block" data-toggle='modal' href='#saber_mas' style= "color:#28b463;" >SABER MAS</a>
+					<!--"btn btn-secundary btn-lg waves-effect btn-block" -->
+					</div>
+					<!---------------------------------------------------------------------------------------------------------------->
+				</div>
+                
+	            <div class="card card-about-me">
+					<div class="header" style="background-color: #aed581">
+						<h2>BUSQUEDA DE ESTUDIANTES</h2>
+					</div>
+					<div class="body" style="background-color: #ffffff">
+						<select name="bue" id="bue" class="selectpicker form-control" data-live-search="true" onChange="document.location.href='<?=BASE_URL . 'perfil/index/'?>'+this.value">
+                        	<option value="">Buscar estudiante</option>
+                            <?php foreach ($this->estudiantes as $est) : ?>
+                            	<option value="<?=$est['usu_id']?>"><?=$est['usu_nombre']." ".$est['usu_apellido']?></option>
+                            <?php endforeach; ?>
+                        </select>
+					</div>
+	            </div>
+
+                <div class="card card-about-me">
+					<div class="header" style="background-color: #aed581">
+						<h2>BUSQUEDA DE AUXILIARES</h2>
+					</div>
+					<div class="body">
+						<select name="bue" id="bue" class="selectpicker form-control" data-live-search="true" onChange="document.location.href='<?=BASE_URL . 'perfil/index/'?>'+this.value">
+                        	<option value="">Buscar auxiliares</option>
+                            <?php foreach ($this->auxiliares as $est) : ?>
+                            	<option value="<?=$est['usu_id']?>"><?=$est['usu_nombre']." ".$est['usu_apellido']?></option>
+                            <?php endforeach; ?>
+                        </select>
+					</div>
+				</div>
+                
+                <div class="card card-about-me">
+					<div class="header" style="background-color: #aed581">
+						<h2>BUSQUEDA DE DOCENTES</h2>
+					</div>
+					<div class="body">
+						<select name="bue" id="bue" class="selectpicker form-control" data-live-search="true" onChange="document.location.href='<?=BASE_URL . 'perfil/index/'?>'+this.value">
+                        	<option value="">Buscar docentes</option>
+                            <?php foreach ($this->docentes as $est) : ?>
+                            	<option value="<?=$est['usu_id']?>"><?=$est['usu_nombre']." ".$est['usu_apellido']?></option>
+                            <?php endforeach; ?>
+                        </select>
+					</div>
+				</div>
+
+				<div class="card card-about-me">
+					<div class="header" style="background-color: #aed581">
+						<h2>BUSQUEDA DE ADMINISTRATIVOS</h2>
+					</div>
+					<div class="body">
+						<select name="bue" id="bue" class="selectpicker form-control" data-live-search="true" onChange="document.location.href='<?=BASE_URL . 'perfil/index/'?>'+this.value">
+                        	<option value="">Buscar administrativo</option>
+                            <?php foreach ($this->administrativos as $est) : ?>
+                            	<option value="<?=$est['usu_id']?>"><?=$est['usu_nombre']." ".$est['usu_apellido']?></option>
+                            <?php endforeach; ?>
+                        </select>
+					</div>
+				</div>
+                
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<div class="modal fade" id="mod-publicacion" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h1 class="modal-title"><i class="glyphicon glyphicon-edit"></i> Modificar Publicación</h1>
+            </div>
+            <div class="modal-body">
+                <form id="form" role="form" method="POST" enctype="multipart/form-data" action="<?=BASE_URL.'inicio/modificar_publicacion'?>" class="form-datos">
+                    <div class="form-group row">
+                        <!--<label for="item" class="col-sm-3">Descripción de Publicación:</label>-->
+                        <div class="col-sm-12">
+                            <div class="form-line">
+                            	<textarea class="form-control" id="mdesc" name="mdesc" rows="3" placeholder="Publica lo que piensas"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="mensaje"></div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" value="guardar"><i class="glyphicon glyphicon-save"></i> Guardar</button>	
+                        <button type="button" class="btn cerrarv" data-dismiss="modal"><i class="glyphicon glyphicon-share-alt"></i> Cerrar</button>	
+                        <input type="hidden" name="id" id="mid">
+                    </div>
+                </form>	  
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mod-comentario">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h1 class="modal-title"><i class="glyphicon glyphicon-edit"></i> Modificar Comentario</h1>
+            </div>
+            <div class="modal-body">
+                <form id="form" role="form" method="POST" enctype="multipart/form-data" action="<?=BASE_URL.'inicio/modificar_comentario'?>" class="form-datos">
+                    <div class="form-group row">
+                        <!--<label for="item" class="col-sm-3">Descripción de Publicación:</label>-->
+                        <div class="col-sm-12">
+                            <div class="form-line">
+                            	<textarea class="form-control" id="mcom" name="mcom" rows="3" placeholder="Publica lo que piensas"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="mensaje"></div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" value="guardar"><i class="glyphicon glyphicon-save"></i> Guardar</button>	
+                        <button type="button" class="btn cerrarv" data-dismiss="modal"><i class="glyphicon glyphicon-share-alt"></i> Cerrar</button>	
+                        <input type="hidden" name="id" id="cmid">
+                    </div>
+                </form>	  
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="saber_mas">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #c8e6c9">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h1 class="modal-title"><i class="glyphicon glyphicon-home"></i> Saber mas</h1>
+            </div>
+            <div class="modal-body" style="background-color: #66bb6a">
+                <form id="form" role="form" method="POST" enctype="multipart/form-data" action="<?=BASE_URL.'inicio/modificar_comentario'?>" class="form-datos">
+                    <div class="form-group row">
+                        <!--<label for="item" class="col-sm-3">Descripción de Publicación:</label>-->
+                        <div class="col-sm-12" style="color: #ffffff;">
+                            Red social; es una red diseñada para la interacción entre Docentes y Estudiantes en el ámbito académico, por un medio tecnológico enfocado a la necesidad del uso de una red académica exclusivamente para la carrera de Ingeniería Electrónica. 
+                        </div>
+                    </div>
+                    <div id="mensaje"></div>
+                    <div class="form-group">
+                        <button type="button" class="btn cerrarv" data-dismiss="modal"><i class="glyphicon glyphicon-share-alt"></i> Cerrar</button>	
+                        <input type="hidden" name="id" id="cmid">
+                    </div>
+                </form>	  
+            </div>
+        </div>
+    </div>
+</div>
+

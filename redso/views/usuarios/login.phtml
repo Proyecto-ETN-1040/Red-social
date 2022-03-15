@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<title>RED-ETN</title>
+
+	<!-- Favicon-->
+	<link rel="icon" href="<?=BASE_URL . '/views/layout/redso_theme/images/descarga.jpg'?>" type="image/x-icon">
+
+	<!-- Bootstrap Core Css listo-->
+	<link href="<?=$_assets['plugins']?>bootstrap/css/bootstrap.css" rel="stylesheet">
+
+	<!-- Waves Effect Css listo-->
+	<link href="<?=$_assets['plugins']?>node-waves/waves.css" rel="stylesheet" />
+
+	<!-- Animation Css listo-->
+	<link href="<?=$_assets['plugins']?>animate-css/animate.css" rel="stylesheet" />
+	<link href="<?=$_assets['css']?>all.min.css" rel="stylesheet" />	<!--listo-->		
+	<link href="<?=$_assets['css']?>fontawesome.min.css" rel="stylesheet" />	<!--listo-->
+
+	<!-- Custom Css -->
+	<link href="<?=$_assets['css']?>style.css" rel="stylesheet">
+</head>
+
+<body class="login-page">
+	<div class="login-box" >
+		<div class="logo">
+			<a href="javascript:void(0);"><b style="font-family: Lucida Calligraphy;">REDING</b></a>
+			<small>RED-ETN</small>
+		</div>
+		<div class="card">
+			<div class="body">
+				<div class="row">
+					<div class="col-sm-6">
+						<img src="<?=BASE_URL . '/views/layout/redso_theme/images/logo_final.2.png'?>" class="img-responsive" align="center" alt="Logo">
+					</div>
+					<div class="col-sm-6">
+                        <br><br><br>
+						<div class="tab-content">
+							<div role="tabpanel" class="tab-pane animated flipInX active" id="home_animation_2">
+								<form id="sign_in" action="<?=BASE_URL . 'usuarios/verificar'?>" method="POST" class="form-login">
+									<div class="msg">Iniciar Sesión</div>
+									<div class="input-group">
+										<span class="input-group-addon">
+											<i class="fa fa-user"></i>
+										</span>
+										<div class="form-line">
+											<input type="text" class="form-control" name="usuario" placeholder="Usuario" required autofocus>
+										</div>
+									</div>
+									<div class="input-group">
+										<span class="input-group-addon">
+											<i class="fa fa-lock"></i>
+										</span>
+										<div class="form-line">
+											<input type="password" class="form-control" name="contrasena"  placeholder="Contraseña" required>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xs-12">
+											<button class="btn btn-block bg-blue waves-effect" type="submit">INICIAR</button>
+										</div>
+									</div>
+									<div class="row m-t-15 m-b--20">
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!-- Jquery Core Js listo-->
+	<script src="<?=$_assets['plugins']?>jquery/jquery.min.js"></script>
+
+	<!-- Bootstrap Core Js listo-->
+	<script src="<?=$_assets['plugins']?>bootstrap/js/bootstrap.js"></script>
+
+	<!-- Waves Effect Plugin Js listo-->
+	<script src="<?=$_assets['plugins']?>node-waves/waves.js"></script>
+
+	<!-- Validation Plugin Js listo-->
+	<script src="<?=$_assets['plugins']?>jquery-validation/jquery.validate.js"></script>
+
+	<script src="<?=$_assets['js']?>validator.min.js"></script>	<!--listo-->
+	<script src="<?=$_assets['plugins']?>bootstrap-notify/bootstrap-notify.min.js"></script><!--listo-->
+	<script src="<?=$_assets['js']?>script.js"></script>	<!--listo-->
+</body>
+
+</html>

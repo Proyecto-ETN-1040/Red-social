@@ -1,0 +1,181 @@
+<section class="content">
+	<div class="container-fluid">
+		<div class="row clearfix">
+			<div class="col-sm-3">
+				<div class="card profile-card">
+					<div class="profile-body" style="padding:20px">
+                    	<h5 align="center">Contenidos</h5>
+                        <a href="<?=BASE_URL . 'admin/materias'?>" class="btn btn-success btn-lg btn-block">Materias</a>
+                        <a href="<?=BASE_URL . 'admin/usuarios'?>" class="btn btn-success btn-lg btn-block">Usuarios</a>
+                        <a href="<?=BASE_URL . 'admin/publicaciones'?>" class="btn btn-success btn-lg btn-block">Publicaciones</a>
+                        <a href="<?=BASE_URL . 'admin/drive'?>" class="btn btn-success btn-lg btn-block">Drive</a>
+                    </div>
+                 </div>
+             </div>
+             <div class="col-sm-9">
+             	<div class="card">
+					<div class="header">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h4 class="card-title text-muted"> 
+                                    Administración de Archivos
+                                </h4>
+                            </div>
+                            <div class="col-sm-6">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table class="table tabla-datos" data-remove="<?=BASE_URL?>usuarios/vaciar" id="tabla1">
+                                <thead class=" text-success">
+                                    <th>Nombre Completo</th>
+                                    <th>Email</th>
+                                    <th>Tipo</th>
+                                    <th>Nivel</th>
+                                    <th>Estado</th>
+                                    <th>Opciones</th>
+                                </thead>
+                                <tbody>
+                                    <?php if ( count($this->usuarios) > 0 ) : ?>
+                                        <?php foreach ($this->usuarios as $persona) : ?>										
+                                            <tr>
+                                                <td><?=$persona['usu_nombre'] . ' ' . $persona['usu_apellido'];?></td>
+                                                <td><?=$persona['usu_email']?></td>
+                                                <td><?php if($persona['usu_tipo']==1){ echo 'Estudiante'; }elseif($persona['usu_tipo']==2){ echo "Docente";}elseif($persona['usu_tipo']==3){ echo 'Auxiliar'; }?></td>
+                                                <td><?php if($persona['usu_nivel']==1) echo 'Administrador'; else echo 'Usuario'; ?>
+                                                </td>
+                                                <td><?php if($persona['usu_estado']==1) echo '<span class="text-success">Activo</span>'; else echo '<span class="text-danger">Inactivo</span>'; ?>
+                                                    
+                                                </td>
+                                                <td>
+                                                    <a href="javascript:void(0)" class="btn btn-sm btn-outline-default btn-round btn-icon borrar-item" title="Vaciar Archivos" data-id="<?=$persona['usu_id']?>" data-item="<?=$persona['usu_nombre'] . ' ' . $persona['usu_apellido']?>"><i class="fa fa-fw fa-trash"></i></a>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="5"><h5 class="text-center text-muted">Sin registros...</h5></td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                	</div>
+                </div>
+             </div>
+        </div>
+    </div>
+</section>
+
+
+<div class="modal fade" id="ventana">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h1 class="modal-title"><i class="glyphicon glyphicon-user"></i> Usuario</h1>
+            </div>
+            <div class="modal-body">
+                <form class="form-datos1" id="form-adm" action="<?=BASE_URL.'usuarios/adm_usuario'?>" method="post" enctype="multipart/form-data">
+                    <div class="form-group row">
+                        <label for="nombre_completo" class="col-sm-2 control-label">Nombres</label>
+                        <div class="col-sm-5">
+                            <div class="form-line focused">
+                                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombres" value="" required="">
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="form-line focused">
+                                <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellidos" value="" required="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="correo" class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10">
+                            <div class="form-line focused">
+                                <input type="email" class="form-control" id="correo" name="correo" placeholder="Correo Electronico" value="" required="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="nueva_contrasena" class="col-sm-2 control-label">Usuario</label>
+                        <div class="col-sm-10">
+                            <div class="form-line focused">
+                                <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Contraseña" required="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="nueva_contrasena" class="col-sm-2 control-label">Contraseña</label>
+                        <div class="col-sm-10">
+                            <div class="form-line focused">
+                                <input type="password" class="form-control" id="contrasena" name="nueva_contrasena" placeholder="Contraseña" required="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="nueva_contrasena" class="col-sm-2 control-label">Tipo</label>
+                        <div class="col-sm-10">
+                            <div class="form-line focused">
+                                <select name="tipo" id="tipo" class="form-control">
+                                	<option value="1">Estudiante</option>
+                                    <option value="2">Docente</option>
+                                    <option value="3">Auxiliar</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="nueva_contrasena" class="col-sm-2 control-label">Nivel</label>
+                        <div class="col-sm-10">
+                            <div class="form-line focused">
+                                <select name="nivel" id="nivel" class="form-control">
+                                	<option value="0">Usuario</option>
+                                    <option value="1">Administrador</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="nueva_contrasena" class="col-sm-2 control-label">Estado</label>
+                        <div class="col-sm-10">
+                            <div class="form-line focused">
+                                <select name="estado" id="estado" class="form-control">
+                                	<option value="1">Activo</option>
+                                    <option value="0">Inactivo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="correo" class="col-sm-2 control-label">Fotografía</label>
+                        <div class="col-sm-10">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="foto" name="foto" placeholder="Foto de Perfil">
+                                <input type="hidden" name="fotor" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="correo" class="col-sm-2 control-label">Imagen</label>
+                        <div class="col-sm-10">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="imagen" name="imagen" placeholder="Imagen de Perfil">
+                                <input type="hidden" name="imagenr" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="mensaje"></div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" value="guardar"><i class="glyphicon glyphicon-save"></i> Guardar</button>	
+                        <button type="button" class="btn cerrarv" data-dismiss="modal"><i class="glyphicon glyphicon-share-alt"></i> Cerrar</button>	
+                        <input type="hidden" name="id" id="admid">
+                        <input type="hidden" name="action" id="action" value="add">
+                    </div>
+                </form>	  
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,354 @@
+
+<section class="content">
+	<div class="container-fluid">
+		<div class="row clearfix">
+			<div class="col-xs-12 col-sm-3">
+				<div class="card profile-card">
+					<div class="profile-header" style="background-color: #0b5345">&nbsp;</div>
+					<div class="profile-body">
+						<div class="image-area" style="padding:0 45px 0 45px">
+                        	<?php //$pub = new indexController();
+								if($this->usuario['usu_foto']==''){
+									$img = 'views/layout/imgs/silueta.jpg';	
+								}else{
+									$img = 'uploads/usuarios/'.$this->usuario['usu_foto'];
+								} 
+							?>
+							<img src="<?=BASE_URL . $img?>" alt="Redso - Profile Image" class="img-responsive">
+						</div>
+						<div class="content-area">
+							<h3><?=$this->usuario['usu_nombre']." ".$this->usuario['usu_apellido']?></h3>
+							<!--<p><?=$this->usuario['usu_usuario']?></p>-->
+							<p><strong style= "color:#01579b;"><?php if($this->usuario['usu_tipo']==1){ echo 'Estudiante'; } else if($this->usuario['usu_tipo']==2){ echo 'Docente'; }else if($this->usuario['usu_tipo']==3){ echo 'Auxiliar'; }?></strong></p>
+                            <?php if(Session::get('id')!=$this->perfil){ ?>
+                            <p><a class="" type="button" onClick="document.location.href='<?=BASE_URL . 'chat/index/'.$this->perfil?>'">ENVIAR MENSAJE</a></p>
+                            <?php } ?>
+						</div>
+					</div>
+                    <?php
+						$pub = new perfilController();
+						$seguidores = ($pub->seguidores($this->usuario['usu_id'])); $siguiendo = ($pub->siguiendo($this->usuario['usu_id']));
+						$nse = count($seguidores); $nsi = count($siguiendo);
+						$siguiendov = ($pub->siguiendo_v(Session::get('id'),$this->usuario['usu_id']));
+					?>
+					<div class="profile-footer" style="background: #0b5345">
+						<br>
+						<!--<ul>
+							<li>
+								<span>Seguidores</span>
+								<span><?=$nse?></span>
+							</li>
+							<li>
+								<span>Siguiendo</span>
+								<span><?=$nsi?></span>
+							</li>
+							<li>
+								<span>Amigos</span>
+								<span>6</span>
+							</li>
+						</ul>
+                        <?php if(Session::get('id')!=$this->perfil){ ?>
+							<form action="<?=BASE_URL.'perfil/registrar_seguir'?>" method="post" class="form-horizontal form-datos">
+							<?php if(!empty($siguiendov)){ ?>
+                                <button class="btn btn-info btn-lg waves-effect btn-block" type="submit">DEJAR DE SEGUIR</button>
+                                <input type="hidden" name="tipo" value="<?=$siguiendov['seg_id']?>">
+							<?php } else { ?>
+                                <button class="btn btn-success btn-lg waves-effect btn-block" type="submit">SEGUIR</button>
+                                <input type="hidden" name="tipo" value="0">
+                            <?php } ?>
+                            <input type="hidden" name="sid" value="<?=$this->perfil?>">
+                            </form>
+                        <?php } ?>-->
+					</div>
+				</div>
+				<?php if($nsi>0 and Session::get('id')==$this->perfil){  ?>
+				<div class="card card-about-me">
+					<div class="header">
+						<h2>SIGUIENDO</h2>
+					</div>
+					<div class="body">
+						<ul>
+							<?php foreach ($siguiendo as $seg) : ?>
+                            <li>
+								<div class="title">
+									<a href="<?=BASE_URL . 'perfil/index/' . $seg['usu_id']?>"><i class="fa fa-book"></i> <?=$seg['usu_nombre']." ".$seg['usu_apellido']?></a>
+								</div>
+							</li>
+                            <?php endforeach; ?>
+						</ul>
+					</div>
+				</div>
+                <?php } ?>
+			</div>
+            <div class="col-xs-12 col-sm-3">
+				<div class="card profile-card">
+					<div class="profile-header" style="background-color: #FFF; height: 0; padding: 0; margin: 0">&nbsp;</div>
+					<div class="profile-body">
+                    	<div class="" style="padding:45px 45px 45px 45px">
+                        	<?php //$pub = new indexController();
+								if($this->usuario['usu_imagen']==''){
+									$img = 'views/layout/redso_theme/images/logo_final.2.png';	
+								}else{
+									$img = 'uploads/usuarios/'.$this->usuario['usu_imagen'];
+								} 
+							?>
+							<img src="<?=BASE_URL . $img?>" alt="Redso - Profile Image" class="img-responsive">
+						</div>
+                    </div>
+                </div>
+            </div>
+			<div class="col-xs-12 col-sm-6">
+                <div class="card">
+					<div class="body">
+						<div>
+							<?php if(Session::get('id')==$this->perfil){ ?>
+                            <ul class="nav nav-tabs" role="tablist">
+								<li role="presentation" class="active"><a href="#posts" aria-controls="posts" role="tab" data-toggle="tab">Publicaciones</a></li>
+								<li role="presentation"><a href="#profile_settings" aria-controls="settings" role="tab" data-toggle="tab">Configuración del perfil</a></li>
+								<li role="presentation"><a href="#change_password_settings" aria-controls="settings" role="tab" data-toggle="tab">Cambiar Contraseña</a></li>
+							</ul>
+							<?php } ?>
+							<div class="tab-content">
+								<?php if ( count($this->publicacion) > 0 ) : ?>
+                                <div role="tabpanel" class="tab-pane fade in active" id="posts">
+                                <?php foreach ($this->publicacion as $publicacion) : 
+                                    if($publicacion['usu_foto']==''){
+                                        $img = 'views/layout/imgs/silueta.jpg';	
+                                    }else{
+                                        $img = 'uploads/usuarios/'.$publicacion['usu_foto'];
+                                    } 
+                                    $comentarios = ($pub->comentarios($publicacion['pub_id']));
+                                    $num = count($comentarios);
+                                    $likes = ($pub->likes($publicacion['pub_id']));
+                                    $nul = count($likes);
+                                    $imagenes = ($pub->imagenes($publicacion['pub_id']));
+                                    $likev = ($pub->likes_v(Session::get('id'),$publicacion['pub_id']));
+                                ?>
+                                <div class="panel-default panel-post" id="pub-<?=$publicacion['pub_id']?>">
+										<div class="panel-heading">
+											<div class="media">
+												<div class="media-left">
+													<a href="#"><img src="<?=BASE_URL . $img?>"></a>
+												</div>
+												<div class="media-body">
+													<h4 class="media-heading">
+														<a href="<?=BASE_URL . 'perfil/index/' . $publicacion['usu_id']?>"><?=$publicacion['usu_nombre']." ".$publicacion['usu_apellido']?></a>
+													</h4>
+													Publicado - <?=$publicacion['pub_fecha']?> | <?=$publicacion['pub_hora']?>
+												</div>
+											</div>
+										</div>
+										<div class="panel-body">
+											<div class="post">
+												<div class="post-heading">
+													<p><?=$publicacion['pub_desc']?></p>
+												</div>
+												<div class="post-content" align="center">
+													<?php $cont=0; if(count($imagenes)>0){ ?>
+                                                        <div class="slideshow" style="height: 0; overflow: hidden">
+															<?php  foreach ($imagenes as $imagen) : ?>
+                                                            	<div class="slide"><img src="<?=BASE_URL.'uploads/'.$imagen['img_imagen']?>" class="img-responsive" style="max-height:500px"></div>
+                                                            <?php $cont++; endforeach; ?>
+                                                        </div>
+                                                    <?php } ?>
+												</div>
+											</div>
+										</div>
+										<div class="panel-footer">
+											<ul>
+												<li>
+													<a href="#" id="like<?=$publicacion['pub_id']?>" onClick="ejecutar('megusta<?=$publicacion['pub_id']?>'); return false;" class="<?php if(!empty($likev)){ echo 'ops'; } ?>">
+														<i class="fa fa-thumbs-up"></i>
+														<span><span id="nul<?=$publicacion['pub_id']?>"><?=$nul?></span> Me gusta</span>
+													</a>
+                                                    <form id="megusta<?=$publicacion['pub_id']?>" action="<?=BASE_URL.'inicio/registrar_like'?>" method="post" class="form-datos">
+                                                    <input type="hidden" name="pid" id="pidl" value="<?=$publicacion['pub_id']?>">
+                                                    <?php if(!empty($likev)){ ?>
+                                                            <input type="hidden" id="tipo<?=$publicacion['pub_id']?>" name="tipo" value="<?=$likev['lik_id']?>">
+                                                    <?php } else { ?>
+                                                            <input type="hidden" id="tipo<?=$publicacion['pub_id']?>" name="tipo" value="0">
+                                                    <?php } ?>
+                                                    </form>
+												</li>
+												<li>
+													<a href="#pub-<?=$publicacion['pub_id']?>" onClick="mostrar('comentarios','<?=$publicacion['pub_id']?>'); return false;">
+														<i class="fa fa-comment"></i>
+														<span><?=$num?> Comentarios</span>
+													</a>
+												</li>
+												<li>
+													<a href="#" onClick="ejecutar('compartir<?=$publicacion['pub_id']?>'); return false;">
+														<i class="fa fa-share-alt"></i>
+														<span>Compartir</span>
+													</a>
+                                                    <form id="compartir<?=$publicacion['pub_id']?>" action="<?=BASE_URL.'inicio/registrar_compartir'?>" method="post" class="form-datos">
+                                                    <input type="hidden" name="pid" id="pidc" value="<?=$publicacion['pub_id']?>">
+                                                    </form>
+												</li>
+											</ul>
+                                            <?php if($num>0){ ?>
+											<div class="form-group comentarios<?=$publicacion['pub_id']?>" <?php if(empty($this->comentario) or $this->comentario!=$publicacion['pub_id']){ ?>style="display:none"<?php } ?>>
+												<?php 
+												foreach ($comentarios as $cop) : 
+													if($publicacion['usu_foto']==''){
+														$img = 'views/layout/imgs/silueta.jpg';	
+													}else{
+														$img = 'uploads/usuarios/'.$cop['usu_foto'];
+													} 
+												?>
+                                                <div class="panel-heading" style="background-color:#EEE">
+                                                    <div class="media">
+                                                        <div class="media-left">
+                                                            <a href="#"><img src="<?=BASE_URL . $img?>"></a>
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <a href="#" class="text-info"><?=$cop['usu_nombre']." ".$cop['usu_apellido']?></a> <?=$cop["com_comentario"]?><br>
+                                                            <span class="text-muted"><?=$cop['com_fecha']?> | <?=$cop['com_hora']?></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <?php endforeach;?>
+											</div>
+                                            <?php } ?>
+                                            <form action="<?=BASE_URL.'inicio/registrar_comentario'?>" method="post" class="form-datos">
+											<div class="form-group">
+												<div class="form-line">
+                                                    <input type="text" class="form-control" name="comentario" placeholder="Escribe un comentario">
+                                                    <input type="hidden" name="pid" value="<?=$publicacion['pub_id']?>">
+                                                    <input type="hidden" name="ctr" value="perfil">
+                                                    <input type="hidden" name="cus" value="<?=$this->perfil?>">
+                                                    <input type="submit" style="display:none">
+												</div>
+											</div>
+                                            </form>
+										</div>
+							</div>
+							<?php endforeach; ?>
+                            </div>
+                            <?php endif; ?>
+								<div role="tabpanel" class="tab-pane fade in" id="profile_settings">
+									<form class="form-horizontal form-datos1" action="<?=BASE_URL.'perfil/editar_perfil'?>" method="post" enctype="multipart/form-data">
+										<div class="form-group">
+											<label for="nombre_completo" class="col-sm-2 control-label">Nombres y Apellidos</label>
+											<div class="col-sm-5">
+												<div class="form-line focused">
+													<input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombres" value="<?=$this->usuario["usu_nombre"]?>" required="">
+												</div>
+											</div>
+                                            <!--<label for="nombre_completo" class="col-sm-2 control-label">Nombre(s)</label>-->
+											<div class="col-sm-5">
+												<div class="form-line focused">
+													<input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellidos" value="<?=$this->usuario["usu_apellido"]?>" required="">
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="correo" class="col-sm-2 control-label">Correo Electrónico</label>
+											<div class="col-sm-10">
+												<div class="form-line focused">
+													<input type="email" class="form-control" id="correo" name="correo" placeholder="Email" value="<?=$this->usuario["usu_email"]?>" required="">
+												</div>
+											</div>
+										</div>
+                                        <div class="form-group">
+											<label for="correo" class="col-sm-2 control-label">Fotografía</label>
+											<div class="col-sm-10">
+												<div class="custom-file">
+													<input type="file" class="custom-file-input" id="foto" name="foto" placeholder="Foto de Perfil">
+                                                    <input type="hidden" name="fotor" value="<?=$this->usuario["usu_foto"]?>">
+                                                    <?php if($this->usuario["usu_foto"]!=""){ ?>
+                                                    <img src="<?=BASE_URL . 'uploads/usuarios/' . $this->usuario["usu_foto"]?>" class="img-responsive" style="max-width:250px">
+                                                    <?php } ?>
+												</div>
+											</div>
+										</div>
+                                        <div class="form-group">
+											<label for="correo" class="col-sm-2 control-label">Imagen</label>
+											<div class="col-sm-10">
+												<div class="custom-file">
+													<input type="file" class="custom-file-input" id="imagen" name="imagen" placeholder="Imagen de Perfil">
+                                                    <input type="hidden" name="imagenr" value="<?=$this->usuario["usu_imagen"]?>">
+                                                    <?php if($this->usuario["usu_imagen"]!=""){ ?>
+                                                    <img src="<?=BASE_URL . 'uploads/usuarios/' . $this->usuario["usu_imagen"]?>" class="img-responsive" style="max-width:250px">
+                                                    <?php } ?>
+												</div>
+											</div>
+										</div>
+										<!--<div class="form-group">
+											<label for="experiencia" class="col-sm-2 control-label">Experiencia</label>
+
+											<div class="col-sm-10">
+												<div class="form-line">
+													<textarea class="form-control" id="experiencia" name="experiencia" rows="3" placeholder="Experiencia"></textarea>
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="habilidades" class="col-sm-2 control-label">Habilidades</label>
+
+											<div class="col-sm-10">
+												<div class="form-line">
+													<input type="text" class="form-control" id="habilidades" name="habilidades" placeholder="Habilidades">
+												</div>
+											</div>
+										</div>-->
+
+										<!-- <div class="form-group">
+											<div class="col-sm-offset-2 col-sm-10">
+												<input type="checkbox" id="terms_condition_check" class="chk-col-red filled-in">
+												<label for="terms_condition_check">I agree to the <a href="#">terms and conditions</a></label>
+											</div>
+										</div> -->
+										<div class="form-group">
+											<div class="col-sm-offset-2 col-sm-10">
+												<button type="submit" class="btn btn-primary">ENVIAR</button>
+											</div>
+										</div>
+									</form>
+								</div>
+								<div role="tabpanel" class="tab-pane fade in" id="change_password_settings">
+									<form class="form-horizontal form-cambiar-clave" action="<?=BASE_URL.'perfil/editar_clave'?>" method="post">
+										<!--<div class="form-group">
+											<label for="anterior_contrasena" class="col-sm-3 control-label">Anterior Contraseña</label>
+											<div class="col-sm-9">
+												<div class="form-line">
+													<input type="password" class="form-control" id="anterior_contrasena" name="anterior_contrasena" placeholder="Anterior Contraseña" required="">                                                    
+                                                    <input type="hidden" class="form-control" id="contrasena" name="contrasena" placeholder="Nueva Contraseña" value="">
+												</div>
+											</div>
+										</div>-->
+										<div class="form-group">
+											<label for="nueva_contrasena" class="col-sm-3 control-label">Nueva Contraseña</label>
+											<div class="col-sm-9">
+												<div class="form-line">
+													<input type="password" class="form-control" id="nueva_contrasena" name="nueva_contrasena" placeholder="Nueva Contraseña" required="">
+
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="nueva_contrasena_confirmar" class="col-sm-3 control-label">Nueva Contraseña (Confirmar)</label>
+											<div class="col-sm-9">
+												<div class="form-line">
+													<input type="password" class="form-control" id="nueva_contrasena_confirmar" name="nueva_contrasena_confirmar" placeholder="Nueva Contraseña (Confirmar)" required="">
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<div class="col-sm-offset-3 col-sm-9">
+												<button type="submit" class="btn btn-primary">ENVIAR</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+

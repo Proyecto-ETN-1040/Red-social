@@ -1,0 +1,118 @@
+<?php
+header("Content-disposition: attachment; filename=nombre_del_archivo.extension");
+header("Content-type: MIME");
+readfile("nombre_del_archivo.extension");
+?>
+
+<?php
+header("Content-disposition: attachment; filename=Hipercubo.pdf");
+header("Content-type: application/pdf");
+readfile("Hipercubo.pdf");
+?>
+<a href="download.php?file=fichero.png">Descargar fichero</a>
+<?php
+if(!empty($_GET['file'])){
+    $fileName = basename($_GET['file']);
+    $filePath = 'files/'.$fileName;
+    if(!empty($fileName) && file_exists($filePath)){
+        // Define headers
+        header("Cache-Control: public");
+        header("Content-Description: File Transfer");
+        header("Content-Disposition: attachment; filename=$fileName");
+        header("Content-Type: application/zip");
+        header("Content-Transfer-Encoding: binary");
+        
+        // Read the file
+        readfile($filePath);
+        exit;
+    }else{
+        echo 'The file does not exist.';
+    }
+}
+
+
+
+$enlace = $path_a_tu_doc."/".$id;
+header ("Content-Disposition: attachment; filename=".$id." ");
+header ("Content-Type: application/octet-stream");
+header ("Content-Length: ".filesize($enlace));
+readfile($enlace);
+
+
+
+
+?> 
+
+
+
+
+<?php
+ 
+if (!isset($_GET['file']) || empty($_GET['file'])) {
+ exit();
+}
+$root = "CarpetaDescargas/";
+$file = basename($_GET['file']);
+$path = $root.$file;
+$type = '';
+ 
+if (is_file($path)) {
+ $size = filesize($path);
+ if (function_exists('mime_content_type')) {
+ $type = mime_content_type($path);
+ } else if (function_exists('finfo_file')) {
+ $info = finfo_open(FILEINFO_MIME);
+ $type = finfo_file($info, $path);
+ finfo_close($info);
+ }
+ if ($type == '') {
+ $type = "application/force-download";
+ }
+ // Define los headers
+ header("Content-Type: $type");
+ header("Content-Disposition: attachment; filename=$file");
+ header("Content-Transfer-Encoding: binary");
+ header("Content-Length: " . $size);
+ // Descargar el archivo
+ readfile($path);
+} else {
+ die("El archivo no existe.");
+}
+ 
+?>
+
+	
+<?php
+ 
+if (!isset($_GET['file']) || empty($_GET['file'])) {
+ exit();
+}
+$root = "CarpetaDescargas/";
+$file = basename($_GET['file']);
+$path = $root.$file;
+$type = '';
+ 
+if (is_file($path)) {
+ $size = filesize($path);
+ if (function_exists('mime_content_type')) {
+ $type = mime_content_type($path);
+ } else if (function_exists('finfo_file')) {
+ $info = finfo_open(FILEINFO_MIME);
+ $type = finfo_file($info, $path);
+ finfo_close($info);
+ }
+ if ($type == '') {
+ $type = "application/force-download";
+ }
+ // Define los headers
+ header("Content-Type: $type");
+ header("Content-Disposition: attachment; filename=$file");
+ header("Content-Transfer-Encoding: binary");
+ header("Content-Length: " . $size);
+ // Descargar el archivo
+ readfile($path);
+} else {
+ die("El archivo no existe.");
+}
+ 
+?>

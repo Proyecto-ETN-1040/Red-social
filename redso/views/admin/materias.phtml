@@ -1,0 +1,115 @@
+<section class="content">
+	<div class="container-fluid">
+		<div class="row clearfix">
+			<div class="col-sm-3">
+				<div class="card profile-card">
+					<div class="profile-body" style="padding:20px">
+                    	<h5 align="center">Contenidos</h5>
+                        <a href="<?=BASE_URL . 'admin/materias'?>" class="btn btn-success btn-lg btn-block">Materias</a>
+                        <a href="<?=BASE_URL . 'admin/usuarios'?>" class="btn btn-success btn-lg btn-block">Usuarios</a>
+                        <a href="<?=BASE_URL . 'admin/publicaciones'?>" class="btn btn-success btn-lg btn-block">Publicaciones</a>
+                        <a href="<?=BASE_URL . 'admin/drive'?>" class="btn btn-success btn-lg btn-block">Drive</a>
+                    </div>
+                 </div>
+             </div>
+             <div class="col-sm-9">
+             	<div class="card">
+					<div class="header">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h4 class="card-title text-muted"> 
+                                    Administración de Materias
+                                </h4>
+                            </div>
+                            <div class="col-sm-6">
+                                <a data-toggle='modal' href='#ventana' class="btn pull-right" onClick="adm_add()"><i class="fa fa-fw fa-plus"></i> Nueva Materia</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table class="table tabla-datos" data-remove="<?=BASE_URL?>materias/borrar" id="tabla1">
+                                <thead class=" text-success">
+                                    <th>Nombre Materia</th>
+                                    <th>Detalle</th>
+                                    <th>Estado</th>
+                                    <th>Opciones</th>
+                                </thead>
+                                <tbody>
+                                    <?php if ( count($this->materias) > 0 ) : ?>
+                                        <?php foreach ($this->materias as $registro) : ?>										
+                                            <tr>
+                                                <td><?=$registro['mat_desc'];?></td>
+                                                <td><?=$registro['mat_detalle']?></td>
+                                                <td><?php if($registro['mat_estado']==1) echo '<span class="text-success">Activo</span>'; else echo '<span class="text-danger">Inactivo</span>'; ?></td>
+                                                <td>
+                                                    <a data-toggle='modal' href='#ventana' data-id="<?=$registro['mat_id']?>" class="btn btn-sm btn-outline-default btn-round btn-icon" title="Editar item" onClick="adm_mod1('<?=BASE_URL."materias/datos_materia"?>','<?=$registro["mat_id"]?>')"><i class="fa fa-fw fa-pencil-alt"></i></a>
+                                                    <a href="javascript:void(0)" class="btn btn-sm btn-outline-default btn-round btn-icon borrar-item" title="Remover item" data-id="<?=$registro['mat_id']?>" data-item="<?=$registro['mat_desc']?>"><i class="fa fa-fw fa-times"></i></a>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="5"><h5 class="text-center text-muted">Sin registros...</h5></td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                	</div>
+                </div>
+             </div>
+        </div>
+    </div>
+</section>
+
+
+<div class="modal fade" id="ventana">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h1 class="modal-title"><i class="glyphicon glyphicon-book"></i> Materia</h1>
+            </div>
+            <div class="modal-body">
+                <form class="form-datos1" id="form-adm" action="<?=BASE_URL.'materias/adm_materia'?>" method="post" enctype="multipart/form-data">
+                    <div class="form-group row">
+                        <label for="nombre_completo" class="col-sm-2 control-label">Nombre</label>
+                        <div class="col-sm-10">
+                            <div class="form-line focused">
+                                <input type="text" class="form-control" id="des" name="des" placeholder="Nombre de Materia" value="" required="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="nombre_completo" class="col-sm-2 control-label">Detalle</label>
+                        <div class="col-sm-10">
+                            <div class="form-line focused">
+                                <textarea class="form-control" id="detalle" name="detalle" placeholder="Descripción de Materia" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="nueva_contrasena" class="col-sm-2 control-label">Estado</label>
+                        <div class="col-sm-10">
+                            <div class="form-line focused">
+                                <select name="estado" id="estado" class="form-control">
+                                	<option value="1">Activo</option>
+                                    <option value="2">Inactivo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="mensaje"></div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" value="guardar"><i class="glyphicon glyphicon-save"></i> Guardar</button>	
+                        <button type="button" class="btn cerrarv" data-dismiss="modal"><i class="glyphicon glyphicon-share-alt"></i> Cerrar</button>	
+                        <input type="hidden" name="id" id="admid">
+                        <input type="hidden" name="url-img" id="url-img" value="<?=BASE_URL . 'uploads/usuarios/'?>">
+                        <input type="hidden" name="action" id="action" value="add">
+                    </div>
+                </form>	  
+            </div>
+        </div>
+    </div>
+</div>
